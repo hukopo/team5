@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace thegame.Models
 {
@@ -24,5 +25,7 @@ namespace thegame.Models
         public Guid Id;
         public bool IsFinished;
         public int Score;
+
+        public CellDto Player => Cells.First(c => c.Id == "Player");
     }
 }
