@@ -46,18 +46,21 @@ namespace thegame.Controllers
                 HashSet<CellDto> visitedCells = new HashSet<CellDto>();
                 Queue<CellDto> cellQueue = new Queue<CellDto>();
                 cellQueue.Enqueue(startCell);
+                visitedCells.Add(startCell);
                 while (cellQueue.Count != 0)
                 {
                     CellDto cell = cellQueue.Dequeue();
-                    visitedCells.Add(cell);
                     if (cell.Type == startColor)
                     {
                         cellsToColor.Add(cell);
                         foreach (Vec neighbourPosition in GetNeighbours(cell.Pos, game.Height, game.Width))
                         {
                             CellDto neighbourCell = game.GetCellByPosition(neighbourPosition);
-                            if (!visitedCells.Contains(neighbourCell))
+                            if (cell.Type == startColor && !visitedCells.Contains(neighbourCell))
+                            {
                                 cellQueue.Enqueue(neighbourCell);
+                                visitedCells.Add(neighbourCell);
+                            }
                         }
                     }
                 }
