@@ -29,6 +29,7 @@ namespace thegame.Controllers
         public IActionResult Moves(Guid gameId, [FromBody]UserInputForMovesPost userInput)
         {
             var game = gameProvider.GetGame(gameId);
+	        ++game.Score;
 
             game.Player.Pos = userInput.ClickedPos;
 
@@ -49,7 +50,6 @@ namespace thegame.Controllers
                 if (cell.Type == startColor)
                 {
                     cellsToColor.Add(cell);
-                    //cell.Type = targetColor;
                     foreach (Vec neighbour in GetNeighbours(cell.Pos, game.Height, game.Width))
                     {
                         CellDto neighbourCell = game.Cells.First(c => c.Pos == neighbour);

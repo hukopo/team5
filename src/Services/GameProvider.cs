@@ -41,8 +41,7 @@ namespace thegame.Services
 	        }
 
 
-            var game = new GameDto(testCells.ToArray(), true, true, width, height, Guid.NewGuid(), movingObjectPosition.X == 0,
-                movingObjectPosition.Y);
+            var game = new GameDto(testCells.ToArray(), true, true, width, height, Guid.NewGuid(), false, 0);
 
             games.Add(game.Id, game);
 
