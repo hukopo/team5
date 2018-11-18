@@ -57,10 +57,12 @@ namespace thegame.Controllers
                 }
             }
 
+	        game.IsFinished = IsGameFinished(game);
+	        
             return new ObjectResult(game);
         }
 
-        private IEnumerable<Vec> GetNeighbours(Vec vec, int height, int width)
+		private IEnumerable<Vec> GetNeighbours(Vec vec, int height, int width)
         {
             if (vec.X - 1 >= 0)
                 yield return vec + new Vec(-1, 0);
@@ -72,11 +74,17 @@ namespace thegame.Controllers
                 yield return vec + new Vec(0, 1);
         }
 
-        //TODO check if all cell with same color
         //TODO find right place for this function
         private bool IsGameFinished(GameDto game)
         {
-            return game.Player.Pos.X == 0;
+	        string color = game.Cells.First(g => g.Id != "Player").Type;
+	        foreach (CellDto cell in game.Cells.Where(g => g.Id != "Player"))
+	        {
+		        if (cell.Type != color)
+			        return false;
+	        }
+
+	        return true;
         }
     }
 }
