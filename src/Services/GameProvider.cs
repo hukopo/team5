@@ -62,7 +62,7 @@ namespace thegame.Services
 				}
 
 
-			var game = new GameDto(testCells.ToArray(), true, true, width, height, Guid.NewGuid(), false, 0);
+			var game = new GameDto(testCells.ToArray(), true, true, width, height, Guid.NewGuid(), false, 0, difficulty);
 
 			games.Add(game.Id, game);
             game.GenerateMatrix();
