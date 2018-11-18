@@ -2,7 +2,9 @@
 const startMessage = document.getElementsByClassName("startMessage")[0];
 const startgameOverlay = document.getElementsByClassName("start")[0];
 const scoreElement = document.getElementsByClassName("scoreContainer")[0];
-const startButton = document.getElementsByClassName("startButton")[0];
+const easyButton = document.getElementsByClassName("easy")[0];
+const normalButton = document.getElementsByClassName("normal")[0];
+const hardButton = document.getElementsByClassName("hard")[0];
 let game = null;
 let currentCells = {};
 
@@ -14,8 +16,29 @@ function handleApiErrors(result) {
     return result.json();
 }
 
-async function startGame() {
-    game = await fetch("/api/games", { method: "POST" })
+async function startEasy() {
+    startGame(1);
+}
+
+async function startNormal() {
+    startGame(2);
+}
+
+async function startHard() {
+    startGame(3);
+}
+
+async function startGame(difficulty) {
+    startgameOverlay.classList.toggle("hidden", true);
+
+    game = await fetch("/api/games",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: difficulty
+            })
         .then(handleApiErrors);
     window.history.replaceState(game.id, "The Game", "/" + game.id);
     renderField(game);
@@ -25,13 +48,13 @@ function makeMove(userInput) {
     if (!game || game.isFinished) return;
     console.log("send userInput: %o", userInput);
     fetch(`/api/games/${game.id}/moves`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(userInput)
-            })
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(userInput)
+        })
         .then(handleApiErrors)
         .then(newGame => {
             game = newGame;
@@ -145,9 +168,14 @@ function onCellClick(e) {
 function initializePage() {
     const gameId = window.location.pathname.substring(1);
     // use gameId if you want
-    startButton.addEventListener("click", e => {
-        startgameOverlay.classList.toggle("hidden", true);
-        startGame();
+    easyButton.addEventListener("click", e => {
+        startEasy();
+    });
+    normalButton.addEventListener("click", e => {
+        startNormal();
+    });
+    hardButton.addEventListener("click", e => {
+        startHard();
     });
     addKeyboardListener();
     addResizeListener();
