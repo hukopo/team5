@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using thegame.Models;
 using thegame.Services;
 
@@ -19,6 +20,8 @@ namespace thegame.Controllers
             {(char)KeyMoves.Right, new Vec(1, 0)}
         };
 
+        private readonly Dictionary<Guid, Mutex> gameMutexes = new Dictionary<Guid, Mutex>();
+
         private readonly GameProvider gameProvider;
 
         public MovesController(GameProvider gameProvider)
@@ -30,6 +33,12 @@ namespace thegame.Controllers
         public IActionResult Moves(Guid gameId, [FromBody]UserInputForMovesPost userInput)
         {
             var game = gameProvider.GetGame(gameId);
+
+            if (!gameMutexes.ContainsKey(gameId))
+                gameMutexes.Add(game.Id, new Mutex());
+            Mutex mutex = gameMutexes[gameId];
+            mutex.WaitOne();
+
             if (userInput.ClickedPos != null)
             {
                 ++game.Score;
@@ -72,6 +81,7 @@ namespace thegame.Controllers
 
                 game.IsFinished = IsGameFinished(game);
             }
+            mutex.ReleaseMutex();
             return new ObjectResult(game);
         }
 
