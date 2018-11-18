@@ -28,46 +28,48 @@ namespace thegame.Controllers
         [HttpPost]
         public IActionResult Moves(Guid gameId, [FromBody]UserInputForMovesPost userInput)
         {
-            var game = gameProvider.GetGame(gameId);
-	        ++game.Score;
+	        var game = gameProvider.GetGame(gameId);
+			if (userInput.ClickedPos != null)
+	        {
+		        ++game.Score;
 
-            game.Player.Pos = userInput.ClickedPos;
+		        game.Player.Pos = userInput.ClickedPos;
 
-            CellDto targetCell = game.Cells.First(c => c.Pos == userInput.ClickedPos && c.Id != "Player");
-            string targetColor = targetCell.Type;
+		        CellDto targetCell = game.Cells.First(c => c.Pos == userInput.ClickedPos && c.Id != "Player");
+		        string targetColor = targetCell.Type;
 
-            CellDto startCell = game.Cells.First(c => c.Pos == new Vec(0, 0));
-            string startColor = startCell.Type;
+		        CellDto startCell = game.Cells.First(c => c.Pos == new Vec(0, 0));
+		        string startColor = startCell.Type;
 
-            List<CellDto> cellsToColor = new List<CellDto>();
-            HashSet<CellDto> visitedCells = new HashSet<CellDto>();
-            Queue<CellDto> cellQueue = new Queue<CellDto>();
-            cellQueue.Enqueue(startCell);
-            while (cellQueue.Count != 0)
-            {
-                CellDto cell = cellQueue.Dequeue();
-                visitedCells.Add(cell);
-                if (cell.Type == startColor)
-                {
-                    cellsToColor.Add(cell);
-                    foreach (Vec neighbour in GetNeighbours(cell.Pos, game.Height, game.Width))
-                    {
-                        CellDto neighbourCell = game.Cells.First(c => c.Pos == neighbour);
-                        if (!visitedCells.Contains(neighbourCell))
-                            cellQueue.Enqueue(neighbourCell);
-                    }
-                }
-            }
+		        List<CellDto> cellsToColor = new List<CellDto>();
+		        HashSet<CellDto> visitedCells = new HashSet<CellDto>();
+		        Queue<CellDto> cellQueue = new Queue<CellDto>();
+		        cellQueue.Enqueue(startCell);
+		        while (cellQueue.Count != 0)
+		        {
+			        CellDto cell = cellQueue.Dequeue();
+			        visitedCells.Add(cell);
+			        if (cell.Type == startColor)
+			        {
+				        cellsToColor.Add(cell);
+				        foreach (Vec neighbour in GetNeighbours(cell.Pos, game.Height, game.Width))
+				        {
+					        CellDto neighbourCell = game.Cells.First(c => c.Pos == neighbour);
+					        if (!visitedCells.Contains(neighbourCell))
+						        cellQueue.Enqueue(neighbourCell);
+				        }
+			        }
+		        }
 
-            foreach (CellDto cell in cellsToColor)
-            {
-                cell.Type = targetColor;
-            }
+		        foreach (CellDto cell in cellsToColor)
+		        {
+			        cell.Type = targetColor;
+		        }
 
-	        game.IsFinished = IsGameFinished(game);
-	        
-            return new ObjectResult(game);
-        }
+		        game.IsFinished = IsGameFinished(game);
+	        }
+	        return new ObjectResult(game);
+		}
 
 		private IEnumerable<Vec> GetNeighbours(Vec vec, int height, int width)
         {

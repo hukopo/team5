@@ -15,11 +15,11 @@ namespace thegame.Services
 
         public GameDto CreateGame(Vec movingObjectPosition)
         {
-            var width = 5;
-            var height = 5;
+            var width = 10;
+            var height = 8;
 
 	        var testCells = new List<CellDto>();
-	        var colors = new string[5]
+	        var colors = new string[]
 	        {
 				"color0",
 				"color1",
