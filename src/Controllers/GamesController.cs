@@ -7,10 +7,17 @@ namespace thegame.Controllers
     [Route("api/games")]
     public class GamesController : Controller
     {
-        [HttpPost]
+	    private readonly GameProvider gameProvider;
+
+		public GamesController(GameProvider gameProvider)
+		{
+			this.gameProvider = gameProvider;
+		}
+
+		[HttpPost]
         public IActionResult Index()
         {
-            return new ObjectResult(TestData.AGameDto(new Vec(1, 1)));
+            return new ObjectResult(gameProvider.CreateGame(new Vec(1, 1)));
         }
     }
 }
