@@ -27,5 +27,16 @@ namespace thegame.Models
         public int Score;
 
         public CellDto Player => Cells.First(c => c.Id == "Player");
+        public CellDto GetCellByPosition(Vec vec) => cellMatrix[vec.X, vec.Y];
+
+        private CellDto[,] cellMatrix;
+
+        public void GenerateMatrix()
+        {
+            cellMatrix = new CellDto[Height, Width];
+            for (int i = 0; i < Height; ++i)
+                for (int j = 0; j < Width; ++j)
+                    cellMatrix[i, j] = Cells.First(c => c.Pos == new Vec(i, j) && c.Id != "Player");
+        }
     }
 }

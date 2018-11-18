@@ -32,8 +32,8 @@ namespace thegame.Services
 					numberOfColors = 4;
 					break;
 				case 3:
-					width = 10;
-					height = 10;
+					width = 20;
+					height = 20;
 					numberOfColors = 5;
 					break;
 			}
@@ -65,6 +65,7 @@ namespace thegame.Services
 			var game = new GameDto(testCells.ToArray(), true, true, width, height, Guid.NewGuid(), false, 0);
 
 			games.Add(game.Id, game);
+            game.GenerateMatrix();
 
 			return game;
 		}
