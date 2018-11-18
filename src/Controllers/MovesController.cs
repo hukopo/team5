@@ -36,8 +36,6 @@ namespace thegame.Controllers
             {
                 ++game.Score;
 
-                game.Player.Pos = userInput.ClickedPos;
-
                 CellDto startCell = game.GetCellByPosition(new Vec(0, 0));
                 string startColor = startCell.Type;
 
@@ -82,20 +80,9 @@ namespace thegame.Controllers
 
         private CellDto GetTargetCell(Game game, string startColor, UserInputForMovesPost userInput)
         {
-            CellDto targetCell = userInput.ClickedPos == null ? 
-                null : game.GetCellByPosition(userInput.ClickedPos);
-
             if (userInput.HasKeypress())
-            {
-                targetCell = game.Cells.First(c => c.Type != startColor && c.Id != "Player" && c.Pos != null);
-                game.Cells.First(c => c.Pos == null).Pos = targetCell.Pos;
-            }
-            else
-            {
-                targetCell = game.Cells.First(c => c.Pos == userInput.ClickedPos && c.Id != "Player");
-            }
-
-            return targetCell;
+                return game.Cells.First(c => c.Type != startColor && c.Id != "Player");
+            return game.GetCellByPosition(userInput.ClickedPos);
         }
 
         private IEnumerable<Vec> GetNeighbours(Vec vec, int height, int width)

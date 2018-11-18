@@ -13,7 +13,6 @@ namespace thegame.Models
         public int Difficulty;
         public bool IsFinished;
 
-        public CellDto Player => Cells.First(c => c.Id == "Player");
         public CellDto GetCellByPosition(Vec vec) => cellMatrix[vec.X, vec.Y];
 
         private readonly CellDto[,] cellMatrix;
