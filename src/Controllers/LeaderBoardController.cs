@@ -17,6 +17,7 @@ namespace thegame.Controllers
     [Route("api/leaderboard")]
     public class LeaderBoardController
     {
+	    private object locker = new object();
         private readonly GameProvider gameProvider;
 
         public LeaderBoardController(GameProvider gameProvider)
