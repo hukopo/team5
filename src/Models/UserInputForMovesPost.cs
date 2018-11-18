@@ -10,5 +10,10 @@ namespace thegame.Models
 
         public readonly char KeyPressed;
         public readonly Vec ClickedPos;
+
+        public bool HasKeypress()
+        {
+            return KeyPressed == (char)73;
+        }
     }
 }

@@ -39,17 +39,31 @@ namespace thegame.Controllers
             Mutex mutex = gameMutexes[gameId];
             mutex.WaitOne();
 
-            if (userInput.ClickedPos != null)
+            if (userInput.ClickedPos != null || userInput.HasKeypress())
             {
                 ++game.Score;
 
                 game.Player.Pos = userInput.ClickedPos;
 
-                CellDto targetCell = game.GetCellByPosition(userInput.ClickedPos);
-                string targetColor = targetCell.Type;
+                CellDto targetCell = userInput.ClickedPos == null ? null : game.GetCellByPosition(userInput.ClickedPos);
+                //string targetColor = targetCell.Type;
+                string targetColor = "";
 
                 CellDto startCell = game.GetCellByPosition(new Vec(0, 0));
                 string startColor = startCell.Type;
+
+
+                if (userInput.HasKeypress())
+                {
+                    targetCell = game.Cells.First(c => c.Type != startColor && c.Id != "Player" && c.Pos != null);
+                    game.Cells.First(c => c.Pos == null).Pos = targetCell.Pos;
+                }
+                else
+                {
+                    targetCell = game.Cells.First(c => c.Pos == userInput.ClickedPos && c.Id != "Player");
+                }
+                targetColor = targetCell.Type;
+
 
                 HashSet<CellDto> cellsToColor = new HashSet<CellDto>();
                 HashSet<CellDto> visitedCells = new HashSet<CellDto>();
