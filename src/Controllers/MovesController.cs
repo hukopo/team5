@@ -30,7 +30,10 @@ namespace thegame.Controllers
         {
             var game = gameProvider.GetGame(gameId);
 
-            string targetColor = game.Cells.First(c => c.Pos == userInput.ClickedPos).Type;
+            game.Player.Pos = userInput.ClickedPos;
+
+            CellDto targetCell = game.Cells.First(c => c.Pos == userInput.ClickedPos && c.Id != "Player");
+            string targetColor = targetCell.Type;
 
             CellDto startCell = game.Cells.First(c => c.Pos == new Vec(0, 0));
             string startColor = startCell.Type;
@@ -45,7 +48,7 @@ namespace thegame.Controllers
                 if (cell.Type == startColor)
                 {
                     cell.Type = targetColor;
-                    foreach (Vec neighbour in GetNeighbours(cell.Pos))
+                    foreach (Vec neighbour in GetNeighbours(cell.Pos, game.Height, game.Width))
                     {
                         CellDto neighbourCell = game.Cells.First(c => c.Pos == neighbour);
                         if (!visitedCells.Contains(neighbourCell))
@@ -57,12 +60,16 @@ namespace thegame.Controllers
             return new ObjectResult(game);
         }
 
-        private IEnumerable<Vec> GetNeighbours(Vec vec)
+        private IEnumerable<Vec> GetNeighbours(Vec vec, int height, int width)
         {
-            yield return vec + new Vec(-1, 0);
-            yield return vec + new Vec(1, 0);
-            yield return vec + new Vec(0, -1);
-            yield return vec + new Vec(0, 1);
+            if (vec.X - 1 >= 0)
+                yield return vec + new Vec(-1, 0);
+            if (vec.X + 1 < width)
+                yield return vec + new Vec(1, 0);
+            if (vec.Y - 1 >= 0)
+                yield return vec + new Vec(0, -1);
+            if (vec.Y + 1 < height)
+                yield return vec + new Vec(0, 1);
         }
 
         //TODO check if all cell with same color

@@ -28,7 +28,7 @@ namespace thegame.Services
 				"color4"
 	        };
 
-	        testCells.Add(new CellDto("Player", new Vec(-1, -1), "color1", "", 0));
+	        testCells.Add(new CellDto("Player", new Vec(1, 1), "color1", "", -1));
 
 			var random = new Random();
 
