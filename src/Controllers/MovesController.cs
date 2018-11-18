@@ -38,6 +38,7 @@ namespace thegame.Controllers
             CellDto startCell = game.Cells.First(c => c.Pos == new Vec(0, 0));
             string startColor = startCell.Type;
 
+            List<CellDto> cellsToColor = new List<CellDto>();
             HashSet<CellDto> visitedCells = new HashSet<CellDto>();
             Queue<CellDto> cellQueue = new Queue<CellDto>();
             cellQueue.Enqueue(startCell);
@@ -47,7 +48,8 @@ namespace thegame.Controllers
                 visitedCells.Add(cell);
                 if (cell.Type == startColor)
                 {
-                    cell.Type = targetColor;
+                    cellsToColor.Add(cell);
+                    //cell.Type = targetColor;
                     foreach (Vec neighbour in GetNeighbours(cell.Pos, game.Height, game.Width))
                     {
                         CellDto neighbourCell = game.Cells.First(c => c.Pos == neighbour);
@@ -55,6 +57,11 @@ namespace thegame.Controllers
                             cellQueue.Enqueue(neighbourCell);
                     }
                 }
+            }
+
+            foreach (CellDto cell in cellsToColor)
+            {
+                cell.Type = targetColor;
             }
 
 	        game.IsFinished = IsGameFinished(game);
