@@ -15,9 +15,9 @@ namespace thegame.Controllers
 		}
 
 		[HttpPost]
-        public IActionResult Index()
+        public IActionResult Index([FromBody] int difficulty)
 		{
-            return new ObjectResult(gameProvider.CreateGame(new Vec(1, 1), 3));
+            return new ObjectResult(gameProvider.CreateGame(new Vec(1, 1), difficulty));
         }
     }
 }
