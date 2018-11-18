@@ -35,7 +35,6 @@ namespace thegame.Controllers
 
             //TODO replace with right game logic
             game.IsFinished = IsGameFinished(game);
-            game.Score = game.Player.Pos.Y;
 
             return new ObjectResult(game);
         }

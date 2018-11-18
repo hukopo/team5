@@ -15,18 +15,33 @@ namespace thegame.Services
 
         public GameDto CreateGame(Vec movingObjectPosition)
         {
-            var width = 10;
-            var height = 8;
-            var testCells = new[]
-            {
-                new CellDto("1", new Vec(2, 4), "color1", "", 0),
-                new CellDto("2", new Vec(5, 4), "color1", "", 0),
-                new CellDto("3", new Vec(3, 1), "color2", "", 20),
-                new CellDto("4", new Vec(1, 0), "color2", "", 20),
-                new CellDto("Player", movingObjectPosition, "color4", "☺", 10),
-            };
+            var width = 5;
+            var height = 5;
 
-            var game = new GameDto(testCells, true, true, width, height, Guid.NewGuid(), movingObjectPosition.X == 0,
+	        var testCells = new List<CellDto>();
+	        var colors = new string[5]
+	        {
+				"color0",
+				"color1",
+				"color2",
+				"color3",
+				"color4"
+	        };
+
+	        testCells.Add(new CellDto("Player", new Vec(-1, -1), "color1", "", 0));
+
+			var random = new Random();
+
+	        var cellId = 1;
+			for(var x=0; x<width; x++)
+	        for (var y = 0; y < height; y++)
+	        {
+		        cellId++;
+		        testCells.Add(new CellDto(cellId.ToString(),new Vec(x,y), colors[random.Next(5)],"",0));
+	        }
+
+
+            var game = new GameDto(testCells.ToArray(), true, true, width, height, Guid.NewGuid(), movingObjectPosition.X == 0,
                 movingObjectPosition.Y);
 
             games.Add(game.Id, game);
