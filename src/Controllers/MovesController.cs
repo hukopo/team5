@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using thegame.Models;
 using thegame.Services;
 
@@ -28,17 +29,43 @@ namespace thegame.Controllers
         public IActionResult Moves(Guid gameId, [FromBody]UserInputForMovesPost userInput)
         {
             var game = gameProvider.GetGame(gameId);
-            if (userInput.ClickedPos != null)
-                game.Player.Pos = userInput.ClickedPos;
-            else if (keyMoveOffsets.ContainsKey(userInput.KeyPressed))
-                game.Player.Pos += keyMoveOffsets[userInput.KeyPressed];
 
-            //TODO replace with right game logic
-            game.IsFinished = IsGameFinished(game);
+            string targetColor = game.Cells.First(c => c.Pos == userInput.ClickedPos).Type;
+
+            CellDto startCell = game.Cells.First(c => c.Pos == new Vec(0, 0));
+            string startColor = startCell.Type;
+
+            HashSet<CellDto> visitedCells = new HashSet<CellDto>();
+            Queue<CellDto> cellQueue = new Queue<CellDto>();
+            cellQueue.Enqueue(startCell);
+            while (cellQueue.Count != 0)
+            {
+                CellDto cell = cellQueue.Dequeue();
+                visitedCells.Add(cell);
+                if (cell.Type == startColor)
+                {
+                    cell.Type = targetColor;
+                    foreach (Vec neighbour in GetNeighbours(cell.Pos))
+                    {
+                        CellDto neighbourCell = game.Cells.First(c => c.Pos == neighbour);
+                        if (!visitedCells.Contains(neighbourCell))
+                            cellQueue.Enqueue(neighbourCell);
+                    }
+                }
+            }
 
             return new ObjectResult(game);
         }
 
+        private IEnumerable<Vec> GetNeighbours(Vec vec)
+        {
+            yield return vec + new Vec(-1, 0);
+            yield return vec + new Vec(1, 0);
+            yield return vec + new Vec(0, -1);
+            yield return vec + new Vec(0, 1);
+        }
+
+        //TODO check if all cell with same color
         //TODO find right place for this function
         private bool IsGameFinished(GameDto game)
         {
