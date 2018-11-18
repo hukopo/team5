@@ -44,28 +44,7 @@ namespace thegame.Controllers
                 targetColor = targetCell.Type;
 
 
-                HashSet<CellDto> cellsToColor = new HashSet<CellDto>();
-                HashSet<CellDto> visitedCells = new HashSet<CellDto>();
-                Queue<CellDto> cellQueue = new Queue<CellDto>();
-                cellQueue.Enqueue(startCell);
-                visitedCells.Add(startCell);
-                while (cellQueue.Count != 0)
-                {
-                    CellDto cell = cellQueue.Dequeue();
-                    if (cell.Type == startColor)
-                    {
-                        cellsToColor.Add(cell);
-                        foreach (Vec neighbourPosition in GetNeighbours(cell.Pos, game.Height, game.Width))
-                        {
-                            CellDto neighbourCell = game.GetCellByPosition(neighbourPosition);
-                            if (cell.Type == startColor && !visitedCells.Contains(neighbourCell))
-                            {
-                                cellQueue.Enqueue(neighbourCell);
-                                visitedCells.Add(neighbourCell);
-                            }
-                        }
-                    }
-                }
+                var cellsToColor = GetCellsToColor(startCell, startColor, game);
 
                 foreach (CellDto cell in cellsToColor)
                 {
@@ -76,6 +55,34 @@ namespace thegame.Controllers
             }
             mutex.ReleaseMutex();
             return new ObjectResult(game.GenerateDto());
+        }
+
+        private HashSet<CellDto> GetCellsToColor(CellDto startCell, string startColor, Game game)
+        {
+            HashSet<CellDto> cellsToColor = new HashSet<CellDto>();
+            HashSet<CellDto> visitedCells = new HashSet<CellDto>();
+            Queue<CellDto> cellQueue = new Queue<CellDto>();
+            cellQueue.Enqueue(startCell);
+            visitedCells.Add(startCell);
+            while (cellQueue.Count != 0)
+            {
+                CellDto cell = cellQueue.Dequeue();
+                if (cell.Type == startColor)
+                {
+                    cellsToColor.Add(cell);
+                    foreach (Vec neighbourPosition in GetNeighbours(cell.Pos, game.Height, game.Width))
+                    {
+                        CellDto neighbourCell = game.GetCellByPosition(neighbourPosition);
+                        if (cell.Type == startColor && !visitedCells.Contains(neighbourCell))
+                        {
+                            cellQueue.Enqueue(neighbourCell);
+                            visitedCells.Add(neighbourCell);
+                        }
+                    }
+                }
+            }
+
+            return cellsToColor;
         }
 
         private CellDto GetTargetCell(Game game, string startColor, UserInputForMovesPost userInput)
