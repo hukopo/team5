@@ -39,6 +39,8 @@ namespace thegame.Controllers
             Mutex mutex = gameMutexes[gameId];
             mutex.WaitOne();
 
+            if (game.IsFinished) return new ObjectResult(game);
+
             if (userInput.ClickedPos != null || userInput.HasKeypress())
             {
                 ++game.Score;
