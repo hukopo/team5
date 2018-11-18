@@ -2,9 +2,11 @@
 const startMessage = document.getElementsByClassName("startMessage")[0];
 const startgameOverlay = document.getElementsByClassName("start")[0];
 const scoreElement = document.getElementsByClassName("scoreContainer")[0];
+const leaderBoardElement = document.getElementsByClassName("leaderboardContainer")[0];
 const easyButton = document.getElementsByClassName("easy")[0];
 const normalButton = document.getElementsByClassName("normal")[0];
 const hardButton = document.getElementsByClassName("hard")[0];
+let leaderboard = null;
 let game = null;
 let currentCells = {};
 
@@ -28,7 +30,23 @@ async function startHard() {
     startGame(3);
 }
 
+function getLeaderboard(difficulty) {
+	fetch("/api/leaderboard",
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: difficulty
+			})
+		.then(handleApiErrors)
+		.then(updateLeaderboard);
+}
+
+
+
 async function startGame(difficulty) {
+	getLeaderboard(difficulty);
     startgameOverlay.classList.toggle("hidden", true);
 
     game = await fetch("/api/games",
@@ -40,7 +58,8 @@ async function startGame(difficulty) {
                 body: difficulty
             })
         .then(handleApiErrors);
-    window.history.replaceState(game.id, "The Game", "/" + game.id);
+	window.history.replaceState(game.id, "The Game", "/" + game.id);
+
     renderField(game);
 }
 
@@ -79,9 +98,16 @@ function renderField(game) {
     updateField(game);
 }
 
+function updateLeaderboard(leaderBoard) {
+	console.log(leaderBoard);
+	if (leaderBoard) {
+		leaderBoardElement.innerText = `Best score on this level so far: ${leaderBoard.bestScore}.\n`;
+	}
+}
+
 function updateField(game) {
     if (game) {
-        scoreElement.innerText = `Your score: ${game.score}`;
+        scoreElement.innerText = `Your score: ${game.score}.`;
         startMessage.innerText = `Your score: ${game.score}. Again?`;
     }
     setTimeout(

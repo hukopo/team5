@@ -4,6 +4,16 @@ using thegame.Services;
 
 namespace thegame.Controllers
 {
+	public class Leaderboard
+	{
+		public int bestScore;
+
+		public Leaderboard(int bestScore)
+		{
+			this.bestScore = bestScore;
+		}
+	}
+
     [Route("api/leaderboard")]
     public class LeaderBoardController
     {
@@ -14,15 +24,32 @@ namespace thegame.Controllers
             this.gameProvider = gameProvider;
         }
 
-        [HttpGet]
-        public IActionResult LeaderBoard()
+        [HttpPost]
+        public IActionResult LeaderBoard([FromBody] int difficulty)
         {
             //TODO decide what to return
-            return new ObjectResult(gameProvider
+	        var gamesCount = gameProvider
+				.GetAllGames()
+		        .Where(g => g.IsFinished)
+		        .Count(g => g.Difficulty == difficulty);
+
+			if (gamesCount == 0)
+				return new ObjectResult(new Leaderboard(0));
+
+            var gamesasd = gameProvider
                 .GetAllGames()
                 .Where(g => g.IsFinished)
+	            .Where(g => g.Difficulty == difficulty)
+	            .ToList();
+
+	        var nextThing = gamesasd
                 .Select(g => g.Score)
-                .OrderByDescending(i => i));
+                .OrderBy(i => i)
+	            .First();
+
+			var bestGame = new Leaderboard(nextThing);
+
+	        return new ObjectResult(bestGame);
         }
     }
 }

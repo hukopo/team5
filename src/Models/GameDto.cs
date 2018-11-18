@@ -5,7 +5,7 @@ namespace thegame.Models
 {
     public class GameDto
     {
-        public GameDto(CellDto[] cells, bool monitorKeyboard, bool monitorMouseClicks, int width, int height, Guid id, bool isFinished, int score)
+        public GameDto(CellDto[] cells, bool monitorKeyboard, bool monitorMouseClicks, int width, int height, Guid id, bool isFinished, int score, int difficulty)
         {
             Cells = cells;
             MonitorKeyboard = monitorKeyboard;
@@ -15,6 +15,7 @@ namespace thegame.Models
             Id = id;
             IsFinished = isFinished;
             Score = score;
+	        Difficulty = difficulty;
         }
 
         public CellDto[] Cells;
@@ -25,6 +26,7 @@ namespace thegame.Models
         public Guid Id;
         public bool IsFinished;
         public int Score;
+	    public int Difficulty;
 
         public CellDto Player => Cells.First(c => c.Id == "Player");
         public CellDto GetCellByPosition(Vec vec) => cellMatrix[vec.X, vec.Y];
