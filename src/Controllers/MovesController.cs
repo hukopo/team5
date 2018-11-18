@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using thegame.Models;
@@ -12,14 +11,6 @@ namespace thegame.Controllers
     [Route("api/games/{gameId}/moves")]
     public class MovesController : Controller
     {
-        private readonly Dictionary<char, Vec> keyMoveOffsets = new Dictionary<char, Vec>
-        {
-            {(char)KeyMoves.Up, new Vec(0, -1)},
-            {(char)KeyMoves.Down, new Vec(0, 1)},
-            {(char)KeyMoves.Left, new Vec(-1, 0)},
-            {(char)KeyMoves.Right, new Vec(1, 0)}
-        };
-
         private readonly Dictionary<Guid, Mutex> gameMutexes = new Dictionary<Guid, Mutex>();
 
         private readonly GameProvider gameProvider;
