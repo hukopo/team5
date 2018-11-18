@@ -16,8 +16,8 @@ namespace thegame.Controllers
 
 		[HttpPost]
         public IActionResult Index()
-        {
-            return new ObjectResult(gameProvider.CreateGame(new Vec(1, 1)));
+		{
+            return new ObjectResult(gameProvider.CreateGame(new Vec(1, 1), 3));
         }
     }
 }
