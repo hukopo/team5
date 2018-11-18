@@ -23,14 +23,14 @@ namespace thegame.Controllers
         [HttpPost]
         public IActionResult Moves(Guid gameId, [FromBody]UserInputForMovesPost userInput)
         {
-            var game = gameProvider.GetGame(gameId);
+            Game game = gameProvider.GetGame(gameId);
 
             if (!gameMutexes.ContainsKey(gameId))
                 gameMutexes.Add(game.Id, new Mutex());
             Mutex mutex = gameMutexes[gameId];
             mutex.WaitOne();
 
-            if (game.IsFinished) return new ObjectResult(game);
+            if (game.IsFinished) return new ObjectResult(game.GenerateDto());
 
             if (userInput.ClickedPos != null || userInput.HasKeypress())
             {
@@ -38,23 +38,11 @@ namespace thegame.Controllers
 
                 game.Player.Pos = userInput.ClickedPos;
 
-                CellDto targetCell = userInput.ClickedPos == null ? null : game.GetCellByPosition(userInput.ClickedPos);
-                //string targetColor = targetCell.Type;
-                string targetColor = "";
-
                 CellDto startCell = game.GetCellByPosition(new Vec(0, 0));
                 string startColor = startCell.Type;
 
-
-                if (userInput.HasKeypress())
-                {
-                    targetCell = game.Cells.First(c => c.Type != startColor && c.Id != "Player" && c.Pos != null);
-                    game.Cells.First(c => c.Pos == null).Pos = targetCell.Pos;
-                }
-                else
-                {
-                    targetCell = game.Cells.First(c => c.Pos == userInput.ClickedPos && c.Id != "Player");
-                }
+                CellDto targetCell = GetTargetCell(game, startColor, userInput);
+                string targetColor = "";
                 targetColor = targetCell.Type;
 
 
@@ -86,10 +74,28 @@ namespace thegame.Controllers
                     cell.Type = targetColor;
                 }
 
-                game.IsFinished = IsGameFinished(game);
+                game.IsFinished = game.IsSameColor();
             }
             mutex.ReleaseMutex();
-            return new ObjectResult(game);
+            return new ObjectResult(game.GenerateDto());
+        }
+
+        private CellDto GetTargetCell(Game game, string startColor, UserInputForMovesPost userInput)
+        {
+            CellDto targetCell = userInput.ClickedPos == null ? 
+                null : game.GetCellByPosition(userInput.ClickedPos);
+
+            if (userInput.HasKeypress())
+            {
+                targetCell = game.Cells.First(c => c.Type != startColor && c.Id != "Player" && c.Pos != null);
+                game.Cells.First(c => c.Pos == null).Pos = targetCell.Pos;
+            }
+            else
+            {
+                targetCell = game.Cells.First(c => c.Pos == userInput.ClickedPos && c.Id != "Player");
+            }
+
+            return targetCell;
         }
 
         private IEnumerable<Vec> GetNeighbours(Vec vec, int height, int width)
@@ -102,22 +108,6 @@ namespace thegame.Controllers
                 yield return vec + new Vec(0, -1);
             if (vec.Y + 1 < height)
                 yield return vec + new Vec(0, 1);
-        }
-
-        //TODO find right place for this function
-        private bool IsGameFinished(GameDto game)
-        {
-            string color = game.GetCellByPosition(new Vec(0, 0)).Type;
-            for (int i = 0; i < game.Height; ++i)
-            {
-                for (int j = 0; j < game.Width; ++j)
-                {
-                    CellDto cell = game.GetCellByPosition(new Vec(i, j));
-                    if (cell.Type != color)
-                        return false;
-                }
-            }
-            return true;
         }
     }
 }

@@ -99,7 +99,6 @@ function renderField(game) {
 }
 
 function updateLeaderboard(leaderBoard) {
-	console.log(leaderBoard);
 	if (leaderBoard) {
 		leaderBoardElement.innerText = `Best score on this level so far: ${leaderBoard.bestScore}.\n`;
 	}
@@ -113,7 +112,6 @@ function updateField(game) {
     setTimeout(
         () => {
             startgameOverlay.classList.toggle("hidden", !game.isFinished);
-            startButton.focus();
         },
         300);
 
@@ -171,7 +169,7 @@ function updateCellDiv(cellDiv, cell) {
 function addKeyboardListener() {
     window.addEventListener("keydown",
         e => {
-            if (game && game.monitorKeyboard) {
+            if (game) {
                 makeMove({ keyPressed: e.keyCode });
                 if (e.keyCode >= 37 && e.keyCode <= 40)
                     e.preventDefault();
@@ -185,7 +183,8 @@ function addResizeListener() {
 }
 
 function onCellClick(e) {
-    if (!game || !game.monitorMouseClicks) return;
+    console.log(game);
+    if (!game) return;
     const x = e.target.dataset.x;
     const y = e.target.dataset.y;
     makeMove({ clickedPos: { x, y } });
@@ -205,7 +204,6 @@ function initializePage() {
     });
     addKeyboardListener();
     addResizeListener();
-    startButton.focus();
 }
 
 initializePage();

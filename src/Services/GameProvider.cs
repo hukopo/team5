@@ -7,12 +7,12 @@ namespace thegame.Services
 {
 	public class GameProvider
 	{
-		private object locker = new object();
-		private readonly Dictionary<Guid, GameDto> games = new Dictionary<Guid, GameDto>();
+		private readonly object locker = new object();
+		private readonly Dictionary<Guid, Game> games = new Dictionary<Guid, Game>();
 
-		public GameDto GetGame(Guid gameId) => games.ContainsKey(gameId) ? games[gameId] : null;
+		public Game GetGame(Guid gameId) => games.ContainsKey(gameId) ? games[gameId] : null;
 
-		public IEnumerable<GameDto> GetAllGames()
+		public IEnumerable<Game> GetAllGames()
 		{
 			lock (locker)
 			{
@@ -20,7 +20,7 @@ namespace thegame.Services
 			}
 		}
 
-		public GameDto CreateGame(Vec movingObjectPosition, int difficulty)
+		public Game CreateGame(Vec movingObjectPosition, int difficulty)
 		{
 			int width =0;
 			int height=0;
@@ -69,14 +69,12 @@ namespace thegame.Services
 				}
 
 
-			var game = new GameDto(testCells.ToArray(), true, true, width, height, Guid.NewGuid(), false, 0, difficulty);
+			var game = new Game(testCells.ToArray(), width, height, Guid.NewGuid(), 0, difficulty);
 
 			lock (locker)
 			{
 				games.Add(game.Id, game);
 			}
-
-			game.GenerateMatrix();
 
 			return game;
 		}
