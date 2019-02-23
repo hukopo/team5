@@ -28,6 +28,18 @@ export default class Cell extends React.Component {
             case 128:
                 style = styles.tile128
                 break;
+            case 256:
+                style = styles.tile256
+                break;
+            case 512:
+                style = styles.tile512
+                break;
+            case 1024:
+                style = styles.tile1024
+                break;
+            case 2048:
+                style = styles.tile2048
+                break;
         }
         this.className = styles.cell + " " + styles.tile + " " + style
 

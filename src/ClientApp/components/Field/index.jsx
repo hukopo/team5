@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './styles.css'
 import Cell from '../Cell';
+import PropTypes from 'prop-types'
 
 
 export default class Field extends React.Component {
@@ -57,4 +58,8 @@ export default class Field extends React.Component {
             </div>
         );
     }
+}
+
+Field.PropTypes = {
+    scoreCallback: PropTypes.func.isRequired
 }

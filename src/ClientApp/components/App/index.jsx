@@ -6,7 +6,7 @@ export default class App extends React.Component {
     constructor () {
         super();
         this.state = {
-            score: 50,
+            score: 0,
         };
     }
 
