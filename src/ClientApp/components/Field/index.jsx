@@ -21,7 +21,7 @@ export default class Field extends React.Component {
     }
 
     createUser = () => {
-        return fetch("/api/game/create", { method: 'POST' })
+        return fetch("/api/game/create/" + this.props.size, { method: 'POST' })
             .then(response => {
                 return response.json()
             })

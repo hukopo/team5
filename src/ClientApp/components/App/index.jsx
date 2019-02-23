@@ -22,9 +22,11 @@ export default class App extends React.Component {
                             <option>4</option>
                             <option>3</option>
                         </select>
+                        нужно снять курсор иначе select будет листать...
                     </span>
                 </div>
-                <Field size={this.state.size} scoreCallback={(s) => this.setState({ score: s })} />
+                {this.state.size == 3 && <Field size={this.state.size} scoreCallback={(s) => this.setState({ score: s })} />}
+                {this.state.size == 4 && <Field size={this.state.size} scoreCallback={(s) => this.setState({ score: s })} />}
             </div>
         );
     }

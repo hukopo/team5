@@ -15,14 +15,14 @@ namespace thegame.Controllers
             return Ok(score);
         }
 
-        [HttpPost("create")]
+        [HttpPost("create/{size}")]
         [Produces("application/json")]
-        public IActionResult CreateGame()
+        public IActionResult CreateGame([FromRoute] int size)
         {
-            var game = GamesKeeper.CreateNewGame(4);
+            var game = GamesKeeper.CreateNewGame(size);
             return Ok(game.Id);
         }
-        
+
         [HttpGet("{userId}/map")]
         [Produces("application/json")]
         public IActionResult Map([FromRoute] Guid userId)
