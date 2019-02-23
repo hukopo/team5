@@ -2,29 +2,29 @@
 
 namespace thegame.backend
 {
-    public class GamesKeeper
+    public static class GamesKeeper
     {
-        public Guid CreateNewGame()
+        public static Guid CreateNewGame(int fieldSize)
         {
             throw new NotImplementedException();
         }
 
-        public void GetStatus(Guid gameId)
+        public static void GetStatus(Guid gameId)
         {
             throw new NotImplementedException();
         }
 
-        public int[,] GetMap(Guid gameId)
+        public static int[,] GetMap(Guid gameId)
         {
             throw new NotImplementedException();
         }
 
-        public int GetScore(Guid gameId)
+        public static int GetScore(Guid gameId)
         {
             throw new NotImplementedException();
         }
 
-        public int[,] MakeMove(Guid gameId, Direction direction)
+        public static int[,] MakeMove(Guid gameId, Direction direction)
         {
             throw new NotImplementedException();
         }
