@@ -58,7 +58,7 @@ export default class Field extends React.Component {
         return (
             <div className={styles.center}>
                 <div className={styles.fieldWrapper}>
-                    <div className={styles.field}>
+                <div className={this.props.size == 3 ? styles.field3x3 : styles.field}>
                         {this.state.cells.map(row =>
                             row.map(cell =>
                                 <Cell value={cell} />))}
