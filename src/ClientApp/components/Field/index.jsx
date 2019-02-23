@@ -21,7 +21,7 @@ export default class Field extends React.Component {
     }
 
     createUser = () => {
-        fetch("/api/game/create", { method: 'POST' })
+        return fetch("/api/game/create", { method: 'POST' })
             .then(response => {
                 return response.json()
             })
@@ -29,15 +29,14 @@ export default class Field extends React.Component {
     }
 
     getScore = () => {
-        fetch("/api/game/score")
+        return fetch("/api/game/score")
             .then(response => {
                 return response.json()
             }).then(response => this.props.scoreCallback(response))
     }
 
     componentDidMount = () => {
-        this.createUser()
-        this.getMap();
+        this.createUser().then(() => this.getMap());
 
 
         window.addEventListener("keydown", e => {
