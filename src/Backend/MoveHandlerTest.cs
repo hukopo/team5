@@ -1,14 +1,23 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
+using FluentAssertions;
+using thegame.backend;
 
-namespace thegame.backend
+[TestFixture]
+public class MoveHandlerTest_Should
 {
-    [TestFixture]
-    public class MoveHandlerTest
+    [Test]
+    public void TestMoveRight()
     {
-        [Test]
-        public void Test()
+        int[,] field = new int[,]
         {
+            { 1, 0, 1 },
+            { 0, 0, 0 },
+            { 2, 2, 2 }
+        };
 
-        }
+        MoveHandler.MoveRowRight(field, 0);
+        Console.WriteLine(field);
+        true.Should().BeTrue();
     }
 }
