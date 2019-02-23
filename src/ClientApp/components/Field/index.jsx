@@ -15,12 +15,15 @@ export default class Field extends React.Component {
                 return response.json()
             })
             .then(response => this.setState({ cells: response }))
-            .then(response => console.log(response));
         fetch("http://localhost:5000/api/game/score")
             .then(response => {
                 return response.json()
             })
-            .then(response => console.log(response));
+
+        window.addEventListener("keydown", e => {
+            if (e.keyCode >= 37 && e.keyCode <= 40)
+                e.preventDefault();
+        });
     }
 
     render() {

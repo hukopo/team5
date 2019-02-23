@@ -13,9 +13,17 @@ export default class Cell extends React.Component {
             case 4:
                 style = styles.tile4
                 break;
+            case 8:
+                style = styles.tile8
+                break;
+            case 16:
+                style = styles.tile16
+                break;
+            case 32:
+                style = styles.tile32
+                break;
         }
-//debugger;
-        this.className = styles.cell + " " + styles.tile + " " + styles.tile2
+        this.className = styles.cell + " " + styles.tile + " " + style
 
     }
     render() {

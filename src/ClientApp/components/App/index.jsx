@@ -18,7 +18,6 @@ export default class App extends React.Component {
                     Ваш счет: { this.state.score }
                 </div>
                 <Field />
-                <Cell />
             </div>
         );
     }
