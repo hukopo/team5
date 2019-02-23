@@ -11,17 +11,24 @@ export default class Field extends React.Component {
         lastDirection: null
     }
 
-    componentDidMount = () => {
+    getMap = () => {
         fetch("/api/game/1/map")
             .then(response => {
                 return response.json()
             })
             .then(response => this.setState({ cells: response }))
+    }
+
+    getScore = () => {
         fetch("/api/game/score")
             .then(response => {
                 return response.json()
-            })
+            }).then(response => this.props.scoreCallback(response))
+    }
 
+    componentDidMount = () => {
+        this.getMap();
+        
         window.addEventListener("keydown", e => {
             let side;
             switch (e.keyCode) {
@@ -40,8 +47,10 @@ export default class Field extends React.Component {
                 default:
                     e.preventDefault();
             }
-            this.setState({lastDirection: side})
-            return fetch('/api/game/1/move/' + side, {method: 'POST'})
+            this.setState({ lastDirection: side })
+            this.getScore();
+            this.getMap();
+            return fetch('/api/game/1/move/' + side, { method: 'POST' })
         });
     }
 

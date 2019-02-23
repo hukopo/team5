@@ -16,7 +16,7 @@ export default class App extends React.Component {
                 <div className={ styles.score }>
                     Ваш счет: { this.state.score }
                 </div>
-                <Field />
+                <Field scoreCallback={(s) => this.setState({score: s})}/>
             </div>
         );
     }
