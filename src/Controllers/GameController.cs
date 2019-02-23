@@ -25,6 +25,18 @@ namespace thegame.Controllers
             var map = new[,]
             {
                 {
+                     (int)Math.Pow(2, random.Next(1, 7)), (int)Math.Pow(2, random.Next(1, 7)), (int)Math.Pow(2, random.Next(1, 7)), 
+
+                },
+                {
+                    (int)Math.Pow(2, random.Next(1, 7)),(int)Math.Pow(2, random.Next(1, 7)),(int)Math.Pow(2, random.Next(1, 7)),
+                },
+                {
+                    (int)Math.Pow(2, random.Next(1, 7)), (int)Math.Pow(2, random.Next(1, 7)), (int)Math.Pow(2, random.Next(1, 7))
+
+                }
+
+               /* {
                      (int)Math.Pow(2, random.Next(1, 7)), (int)Math.Pow(2, random.Next(1, 7)), (int)Math.Pow(2, random.Next(1, 7)), (int)Math.Pow(2, random.Next(1, 7))
 
                 },
@@ -38,7 +50,7 @@ namespace thegame.Controllers
                 {
                     (int)Math.Pow(2, random.Next(1, 7)), (int)Math.Pow(2, random.Next(1, 7)), (int)Math.Pow(2, random.Next(1, 7)), (int)Math.Pow(2, random.Next(1, 7))
 
-                }
+                } */
             };
             return Ok(map);
         }
