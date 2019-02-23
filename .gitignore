@@ -1,4 +1,4 @@
 /.vs/
 /.idea
 /*.user
-/*-lock.json
+/src/*-lock.json
