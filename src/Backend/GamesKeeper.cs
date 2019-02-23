@@ -1,32 +1,38 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace thegame.backend
 {
     public static class GamesKeeper
     {
-        public static Guid CreateNewGame(int fieldSize)
+        private static Dictionary<Guid, Game> games = new Dictionary<Guid, Game>();
+
+        public static Game CreateNewGame(int fieldSize)
         {
-            throw new NotImplementedException();
+            var newGame = new Game(Guid.NewGuid(), fieldSize);
+            games.Add(newGame.Id, newGame);
+            return newGame;
         }
 
-        public static void GetStatus(Guid gameId)
+        public static GameStatus GetStatus(Guid gameId)
         {
-            throw new NotImplementedException();
+            return games[gameId].GameStatus;
         }
 
         public static int[,] GetMap(Guid gameId)
         {
-            throw new NotImplementedException();
+            return games[gameId].GameField.Field;
         }
 
         public static int GetScore(Guid gameId)
         {
-            throw new NotImplementedException();
+            return games[gameId].Score;
         }
 
         public static int[,] MakeMove(Guid gameId, Direction direction)
         {
-            throw new NotImplementedException();
+            games[gameId].MakeMove(direction);
+            return games[gameId].GameField.Field;
         }
     }
 }

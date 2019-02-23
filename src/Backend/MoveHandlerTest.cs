@@ -6,6 +6,9 @@ namespace thegame.backend
     public class MoveHandlerTest
     {
         [Test]
-        public void 
+        public void Test()
+        {
+
+        }
     }
 }
