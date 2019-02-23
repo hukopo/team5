@@ -15,7 +15,10 @@ namespace thegame.Backend
                         emptyCells.Add(Tuple.Create(i, j));
 
             var rnd = new Random();
-            var cellIndex = rnd.Next(0, emptyCells.Count - 1);
+            if (emptyCells.Count == 0)
+                return;
+
+            var cellIndex = rnd.Next(0, emptyCells.Count);
             var cell = emptyCells[cellIndex];
 
             var val = rnd.NextDouble();

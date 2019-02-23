@@ -18,13 +18,14 @@ namespace thegame.backend
             Size = size;
             GameStatus = GameStatus.InProcess;
             GameField = new GameField(size);
+            Score = 0;
             FieldPopulator.Populate(GameField);
         }
 
         public void MakeMove(Direction direction)
         {
            
-            MoveHandler.MakeMove(GameField, direction);
+            Score += MoveHandler.MakeMove(GameField, direction);
             FieldPopulator.Populate(GameField);
         }
     }
