@@ -12,6 +12,7 @@ namespace thegame.Controllers
         }
         
         [HttpGet("map")]
+        [Produces("application/json")]
         public IActionResult Map()
         {
             return Ok(new[,]{{0,2,0,0},{0,0,4,0},{0,0,0,0},{0,0,0,0}});
