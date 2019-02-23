@@ -9,6 +9,7 @@ namespace thegame.Controllers
     public class GameController : Controller
     {
         [HttpGet("{userId}/score")]
+        [Produces("application/json")]
         public IActionResult Score([FromRoute] Guid userId)
         {
             var score = GamesKeeper.GetScore(userId);

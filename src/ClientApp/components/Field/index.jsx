@@ -29,7 +29,7 @@ export default class Field extends React.Component {
     }
 
     getScore = () => {
-        return fetch("/api/game/score")
+        return fetch("/api/game/" + this.state.id + "/score")
             .then(response => {
                 return response.json()
             }).then(response => this.props.scoreCallback(response))
