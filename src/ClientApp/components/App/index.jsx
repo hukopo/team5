@@ -22,7 +22,6 @@ export default class App extends React.Component {
                             <option>4</option>
                             <option>3</option>
                         </select>
-                        {this.state.size}
                     </span>
                 </div>
                 <Field size={this.state.size} scoreCallback={(s) => this.setState({ score: s })} />
