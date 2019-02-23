@@ -34,7 +34,6 @@ body {
 }
 
 .tile {
-    position: absolute;
     width: 106.25px;
     height: 106.25px;
     border-radius: 3px;
