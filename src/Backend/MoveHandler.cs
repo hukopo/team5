@@ -6,8 +6,18 @@ namespace thegame.backend
     {
         public static GameField MakeMove(GameField previousField, Move move)
         {
+            var newField = new GameField(previousField.Size);
+            for(var i = 0; i < previousField.Size; i++)
+            for (var j = 0; j < previousField.Size; j++)
+                newField.Field[i, j] = previousField.Field[i, j];
 
-            return new GameField(previousField.Size);
+            if (move == Move.Right)
+            {
+                for(var i = 0; i < newField.Size; i++)
+                    MoveRowRight(newField.Field, i);
+            }
+
+            return newField;
         }
 
         public static bool CanMakeMove(GameField field)
