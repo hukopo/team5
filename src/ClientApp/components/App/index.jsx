@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './styles.css';
 import Field from '../Field';
-import Cell from '../Cell';
 
 export default class App extends React.Component {
     constructor () {

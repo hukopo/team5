@@ -6,7 +6,8 @@ import Cell from '../Cell';
 export default class Field extends React.Component {
 
     state = {
-        cells: []
+        cells: [],
+        lastDirection: null
     }
 
     componentDidMount = () => {
@@ -38,6 +39,7 @@ export default class Field extends React.Component {
                 default:
                     e.preventDefault();
             }
+            this.setState({lastDirection: side})
             return fetch('/api/game/1/move/' + side, {method: 'POST'})
         });
     }

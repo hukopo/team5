@@ -1,9 +1,11 @@
 body {
     background-color: #faf8ef;
     font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+    overflow-y:hidden;
 }
 
 .center {
+    margin-top: -50px;
     text-align: center;
 }
 
