@@ -4,7 +4,7 @@
     {
         public static GameField MakeMove(GameField previousField, Move move)
         {
-            return new GameField();
+            return new GameField(1, 1);
         }
     }
 }
