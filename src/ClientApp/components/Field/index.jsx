@@ -8,15 +8,24 @@ export default class Field extends React.Component {
 
     state = {
         cells: [],
-        lastDirection: null
+        lastDirection: null,
+        id: 0
     }
 
     getMap = () => {
-        fetch("/api/game/1/map")
+        fetch("/api/game/" + this.state.id + "/map")
             .then(response => {
                 return response.json()
             })
             .then(response => this.setState({ cells: response }))
+    }
+
+    createUser = () => {
+        fetch("/api/game/create", { method: 'POST' })
+            .then(response => {
+                return response.json()
+            })
+            .then(response => this.setState({ id: response }))
     }
 
     getScore = () => {
@@ -27,7 +36,9 @@ export default class Field extends React.Component {
     }
 
     componentDidMount = () => {
+        this.createUser()
         this.getMap();
+
 
         window.addEventListener("keydown", e => {
             let side;
@@ -50,7 +61,7 @@ export default class Field extends React.Component {
             this.setState({ lastDirection: side })
             this.getScore();
             this.getMap();
-            fetch('/api/game/1/move/' + side, { method: 'POST' })
+            fetch('/api/game/' + this.state.id + '/move/' + side, { method: 'POST' })
         });
     }
 
@@ -58,7 +69,7 @@ export default class Field extends React.Component {
         return (
             <div className={styles.center}>
                 <div className={styles.fieldWrapper}>
-                <div className={this.props.size == 3 ? styles.field3x3 : styles.field}>
+                    <div className={this.props.size == 3 ? styles.field3x3 : styles.field}>
                         {this.state.cells.map(row =>
                             row.map(cell =>
                                 <Cell value={cell} />))}

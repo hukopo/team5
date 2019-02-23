@@ -15,12 +15,19 @@ namespace thegame.Controllers
             return Ok(score);
         }
 
+        [HttpPost("/create")]
+        [Produces("application/json")]
+        public IActionResult CreateGame()
+        {
+            var game = GamesKeeper.CreateNewGame(4);
+            return Ok(game.Id);
+        }
+        
         [HttpGet("{userId}/map")]
         [Produces("application/json")]
         public IActionResult Map([FromRoute] Guid userId)
         {
-            var game = GamesKeeper.CreateNewGame(4);
-            var mapRepo = GamesKeeper.GetMap(game.Id);
+            var mapRepo = GamesKeeper.GetMap(userId);
             if (mapRepo != null)
                 return Ok(mapRepo);
             return BadRequest();
