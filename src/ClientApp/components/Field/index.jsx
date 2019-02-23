@@ -10,34 +10,35 @@ export default class Field extends React.Component {
     }
 
     componentDidMount = () => {
-        fetch("http://localhost:5000/api/game/map")
+        fetch("/api/game/1/map")
             .then(response => {
                 return response.json()
             })
             .then(response => this.setState({ cells: response }))
-        fetch("http://localhost:5000/api/game/score")
+        fetch("/api/game/score")
             .then(response => {
                 return response.json()
             })
 
         window.addEventListener("keydown", e => {
+            let side;
             switch (e.keyCode) {
                 case 37:
-                    console.log('left')
+                    side = 'left';
                     break;
                 case 38:
-                    console.log('up')
+                    side = 'up'
                     break;
                 case 39:
-                    console.log('right')
+                    side = 'right'
                     break;
                 case 40:
-                    console.log('down')
+                    side = 'down'
                     break;
                 default:
                     e.preventDefault();
-
             }
+            return fetch('/api/game/1/move/' + side, {method: 'POST'})
         });
     }
 

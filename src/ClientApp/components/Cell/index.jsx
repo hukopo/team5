@@ -22,6 +22,12 @@ export default class Cell extends React.Component {
             case 32:
                 style = styles.tile32
                 break;
+            case 64:
+                style = styles.tile64
+                break;
+            case 128:
+                style = styles.tile128
+                break;
         }
         this.className = styles.cell + " " + styles.tile + " " + style
 
