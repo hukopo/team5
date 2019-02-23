@@ -21,7 +21,7 @@ namespace thegame.backend
 
         public void MakeMove(Direction direction)
         {
-            throw new NotImplementedException();
+            MoveHandler.MakeMove(GameField, direction);
         }
     }
 }
