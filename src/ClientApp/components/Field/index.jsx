@@ -28,7 +28,7 @@ export default class Field extends React.Component {
 
     componentDidMount = () => {
         this.getMap();
-        
+
         window.addEventListener("keydown", e => {
             let side;
             switch (e.keyCode) {
@@ -45,12 +45,12 @@ export default class Field extends React.Component {
                     side = 'down'
                     break;
                 default:
-                    e.preventDefault();
+                    return;
             }
             this.setState({ lastDirection: side })
             this.getScore();
             this.getMap();
-            return fetch('/api/game/1/move/' + side, { method: 'POST' })
+            fetch('/api/game/1/move/' + side, { method: 'POST' })
         });
     }
 
