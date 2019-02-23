@@ -23,8 +23,9 @@ namespace thegame.backend
 
         public void MakeMove(Direction direction)
         {
-            FieldPopulator.Populate(GameField);
+           
             MoveHandler.MakeMove(GameField, direction);
+            FieldPopulator.Populate(GameField);
         }
     }
 }

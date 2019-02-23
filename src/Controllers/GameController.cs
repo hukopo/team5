@@ -15,7 +15,7 @@ namespace thegame.Controllers
             return Ok(score);
         }
 
-        [HttpPost("/create")]
+        [HttpPost("create")]
         [Produces("application/json")]
         public IActionResult CreateGame()
         {
@@ -33,14 +33,12 @@ namespace thegame.Controllers
             return BadRequest();
         }
 
-        [Route("{userId}/move/{side}")]
+        [Route("{userId}/move/{direction}")]
         [Produces("application/json")]
         public IActionResult Move([FromRoute] Guid userId, [FromRoute] string direction)
         {
-            var dirs = Enum.GetNames(typeof(Direction)).Select(x => x.ToLower());
-            if (dirs.Contains(direction))
+            if (Enum.TryParse(direction, true, out Direction dir))
             {
-                Enum.TryParse("red", true , out Direction dir);
                 GamesKeeper.MakeMove(userId, dir);
                 return Ok(direction);
             }

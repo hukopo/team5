@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace thegame.backend
 {
@@ -8,7 +9,7 @@ namespace thegame.backend
         {
             if (move == Direction.Right)
             {
-                for(var i = 0; i < field.Size; i++)
+                for (var i = 0; i < field.Size; i++)
                     MoveRowRight(field.Field, i);
             }
             else if (move == Direction.Left)
@@ -34,20 +35,9 @@ namespace thegame.backend
             for (var col = 0; col < field.GetLength(0); col++)
                 if (field[col, colIndex] != 0)
                     filledItems.Add(field[col, colIndex]);
-            var resultItems = new List<int>();
-            for (var index = filledItems.Count; index > 0; index--)
-            {
-                if (filledItems[index] == filledItems[index - 1])
-                {
-                    resultItems.Add(filledItems[index] * 2);
-                    index--;
-                }
-                else
-                {
-                    resultItems.Add(filledItems[index]);
-                }
-            }
-
+            filledItems.Reverse();
+            var resultItems = Reduce(filledItems);
+            
             for (var index = 0; index < field.GetLength(0); index++)
                 field[index, colIndex] = 0;
             for (var index = 0; index < resultItems.Count; index++)
@@ -61,8 +51,19 @@ namespace thegame.backend
             for (var row = 0; row < height; row++)
                 if (field[row, colIndex] != 0)
                     filledItems.Add(field[row, colIndex]);
+            var resultItems = Reduce(filledItems);
+
+            for (var index = 0; index < height; index++)
+                field[index, colIndex] = 0;
+            for (var index = 0; index < resultItems.Count; index++)
+                field[index, colIndex] = resultItems[index];
+        }
+
+        public static List<int> Reduce(List<int> filledItems)
+        {
             var resultItems = new List<int>();
-            for (var index = 0; index < 0; index++)
+            var index = 0;
+            for (; index < filledItems.Count - 1; index++)
             {
                 if (filledItems[index] == filledItems[index + 1])
                 {
@@ -75,10 +76,10 @@ namespace thegame.backend
                 }
             }
 
-            for (var index = 0; index < height; index++)
-                field[index, colIndex] = 0;
-            for (var index = 0; index < resultItems.Count; index++)
-                field[height - 1 - index, colIndex] = resultItems[index];
+            if (index == filledItems.Count - 1)
+                resultItems.Add(filledItems[index]);
+
+            return resultItems;
         }
 
         public static void MoveRowLeft(int[,] field, int rowIndex)
@@ -88,24 +89,12 @@ namespace thegame.backend
             for (var col = 0; col < width; col++)
                 if (field[rowIndex, col] != 0)
                     filledItems.Add(field[rowIndex, col]);
-            var resultItems = new List<int>();
-            for (var index = 0; index < 0; index++)
-            {
-                if (filledItems[index] == filledItems[index + 1])
-                {
-                    resultItems.Add(filledItems[index] * 2);
-                    index++;
-                }
-                else
-                {
-                    resultItems.Add(filledItems[index]);
-                }
-            }
+            var resultItems = Reduce(filledItems);
 
             for (var index = 0; index < width; index++)
                 field[rowIndex, index] = 0;
             for (var index = 0; index < resultItems.Count; index++)
-                field[rowIndex, width - 1 - index] = resultItems[index];
+                field[rowIndex, index] = resultItems[index];
         }
 
         public static void MoveRowRight(int[,] field, int rowIndex)
@@ -114,19 +103,8 @@ namespace thegame.backend
             for(var col = 0; col < field.GetLength(0); col++)
                 if (field[rowIndex, col] != 0)
                     filledItems.Add(field[rowIndex, col]);
-            var resultItems = new List<int>();
-            for (var index = filledItems.Count; index > 0; index--)
-            {
-                if (filledItems[index] == filledItems[index - 1])
-                {
-                    resultItems.Add(filledItems[index] * 2);
-                    index--;
-                }
-                else
-                {
-                    resultItems.Add(filledItems[index]);
-                }
-            }
+            filledItems.Reverse();
+            var resultItems = Reduce(filledItems);
 
             for (var index = 0; index < field.GetLength(0); index++)
                 field[rowIndex, index] = 0;
